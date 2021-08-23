@@ -1,8 +1,16 @@
+export function sortAsc(dataSet: number[]):number[] {
+  return dataSet.sort((a,b) => a - b);
+}
+
 function generateRandomNumber(max: number = 9999, min: number = 1):number {
   return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-export function generateRandomDataset(): number[] {
+export type randomSetReturn = {
+  data: number[];
+}
+
+export function generateRandomDataset(): randomSetReturn {
   const dataSetSize = generateRandomNumber(20, 1);
   const dataSet: number[] = [];
 
@@ -10,7 +18,7 @@ export function generateRandomDataset(): number[] {
     dataSet.push(generateRandomNumber(99999, 1))
   }
 
-  return dataSet;
+  return { data: dataSet };
 }
 
 export function getMean(dataSet: number[]): number {
@@ -49,9 +57,9 @@ interface countItem {
   index: number;
 }
 
-export function getMode(dataSet: number[]): number[] {
+export function getMode(dataSet: number[]): string {
   if (!dataSet.length)
-    return []
+    return "";
 
   let counts: countItem[] = [], maxIndex = 0;
 
@@ -66,6 +74,8 @@ export function getMode(dataSet: number[]): number[] {
       maxIndex = counts[dataSet[i]].counting;
     }
   }
+  
+  if (maxIndex === 1) return "";
 
-  return counts.filter(el => el.index === maxIndex).map(el => el.index);
+  return counts.filter(el => el.counting === maxIndex).map(el => el.index).join(",");
 }
